@@ -83,7 +83,7 @@ wheels = [
 ]
 
 [[package]]
-name = "cintel-03-signal-design"
+name = "cintel-03-signal-design-clickstream"
 version = "0.1.0"
 source = { editable = "." }
 default-groups = "all"

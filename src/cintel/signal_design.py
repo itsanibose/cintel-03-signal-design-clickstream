@@ -1,17 +1,24 @@
 """signal_design.py - Project script (example).
 
-Author: Your Name Here
-Date: 2026-mm-dd
+Author: Anindya Bose
+Date: 2026-11-04
 
 System Metrics Data
 
-- Data is taken from a system that records operational metrics.
+- Data is same clickstream data from online webstore.
 - The data is structured and static for this example.
 - Each row represents one observation of system behavior.
 - The CSV file includes these columns:
-  - requests: number of requests handled
-  - errors: number of failed requests
-  - total_latency_ms: total response time in milliseconds
+  - event_time
+  - event_type
+  - product_id
+  - category_id
+  - category_code
+  - brand
+  - price
+  - user_id
+  - user_session
+
 
 Purpose
 
@@ -28,8 +35,8 @@ Questions to Consider
 
 Paths (relative to repo root)
 
-    INPUT FILE: data/system_metrics.csv
-    OUTPUT FILE: artifacts/signals.csv
+    INPUT FILE: data/2020-Jan.csv
+    OUTPUT FILE: artifacts/metrics.csv
 
 Terminal command to run this file from the root project folder
 
