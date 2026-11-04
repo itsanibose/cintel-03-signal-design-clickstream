@@ -1,8 +1,8 @@
-# cintel-03-signal-design
+# cintel-03-signal-design-clickstream
 
 [![Python 3.14](https://img.shields.io/badge/python-3.14%2B-blue?logo=python)](pyproject.toml)
-[![CI](https://github.com/denisecase/cintel-03-signal-design/actions/workflows/ci-python-zensical.yml/badge.svg)](https://github.com/denisecase/cintel-03-signal-design/actions/workflows/ci-python-zensical.yml)
-[![Documentation](https://img.shields.io/badge/docs-site-blue?logo=github)](https://denisecase.github.io/cintel-03-signal-design/)
+[![CI](https://github.com/itsanibose/cintel-03-signal-design-clickstream/actions/workflows/ci-python-zensical.yml/badge.svg)](https://github.com/itsanibose/cintel-03-signal-design-clickstream/actions/workflows/ci-python-zensical.yml)
+[![Documentation](https://img.shields.io/badge/docs-site-blue?logo=github)](https://itsanibose.github.io/cintel-03-signal-design-clickstream/)
 
 [![uv managed](https://img.shields.io/badge/uv-managed-DE5FE9)](https://docs.astral.sh/uv/)
 [![ty type checked](https://img.shields.io/badge/ty-type_checked-2F80ED)](https://docs.astral.sh/ty/)
@@ -13,35 +13,41 @@
 
 ## Project Overview
 
-Author: Denise Case
+Author: Anindya Bose
 
-Date: 2026 October
+Date: 2026 November
 
-This project introduces signal design for continuous intelligence.
-
-The goal is to derive useful indicators from raw measurements
-so that system behavior can be interpreted more clearly.
+# E-Commerce Clickstream Signal Processor:
+A high-performance analytics pipeline built with Polars to engineer behavioral
+telemetry metrics—tracking like session durations,browsing velocity, cart friction ratios,
+and user inactivity thresholds—from raw online shopping event streams.
 
 The project is configured in
 [pyproject.toml](pyproject.toml).
 
 ## Data
 
-The example uses system metrics from `data/`.
+The example uses system metrics from `data/2020-Jan.csv`.
 
-Each observation includes:
+### Data Schema & Engineered Metrics
 
-- `requests` - number of requests handled.
-- `errors` - number of failed requests.
-- `total_latency_ms` - total response time in milliseconds.
+Each row in the raw dataset contains the following baseline fields:
+
+* `event_time`   – The timestamp of the interaction (stored as UTC).
+* `event_type`   – The type of user action (`view`, `cart`, `remove_from_cart`, `purchase`).
+* `price`        – The cost of the product at the time of the event.
+* `user_session` – A unique string ID tracking a single browser session.
+
 
 ## Approach
 
-The pipeline uses Polars to calculate derived signals:
+From the above raw events, the Polars pipeline aggregates and calculates:
 
-- **Error rate** - errors relative to requests.
-- **Average latency** - average response time per request.
-- **Throughput** - request volume represented in the example.
+* `session_duration_sec`    – The exact time span of a user's session from their first click to their last.
+* `click_velocity_per_min`  – The user's browsing speed, measured by total interactions per minute.
+* `cart_to_view_ratio`      – A conversion metric tracking how often a user moves from browsing a product to adding it to their cart.
+* `time_gap_seconds` & `is_session_stale` – The operational signals used to flag when a user has gone inactive.
+
 
 Explore these project components:
 
@@ -103,7 +109,7 @@ uv run pytest
 
 ## Project Documentation
 
-The [hosted documentation site](https://denisecase.github.io/cintel-03-signal-design/)
+The [hosted documentation site](https://itsanibose.github.io/cintel-03-signal-design-clickstream/)
 is published using Zensical and GitHub Pages.
 
 The documentation site is used to present the project report,

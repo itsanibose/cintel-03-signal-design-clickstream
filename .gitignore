@@ -367,3 +367,7 @@ docs/assets/data/view-analytics.json
 docs/assets/data/guide-context.json
 # marimo WASM export; built at deploy time, not committed
 docs/app/
+
+
+#WHY: Avoiding committing large dataset ( >2000 kb), a small example file will be provided instead.
+data/2020-Jan.csv
