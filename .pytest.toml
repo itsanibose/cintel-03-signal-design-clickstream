@@ -1,7 +1,7 @@
 # ============================================================
 # .pytest.toml (ALL-PY-SRC-REPOS)
 # ============================================================
-# Updated: 2026-10-11
+# Updated: 2026-11-04
 #
 # WHAT: A TOML configuration file for pytest, a Python testing framework.
 #       pytest discovers and executes automated tests to verify code behavior.

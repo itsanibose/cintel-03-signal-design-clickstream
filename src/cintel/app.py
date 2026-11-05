@@ -58,9 +58,9 @@ async def _():
     import marimo as mo
     import polars as pl
 
-    from cintel.utils_system import design_signals, load_system_metrics
+    from cintel.utils_system import design_clickstream_metrics, load_clickstream
 
-    return design_signals, load_system_metrics, mo, pl, sys
+    return load_clickstream, design_clickstream_metrics, mo, pl, sys
 
 
 # === TITLE AND INTRODUCTION ===
@@ -82,30 +82,30 @@ def _(mo):
 
 
 @app.cell
-def _(design_signals, load_system_metrics, mo, sys):
-    """Load system metrics and design signals. Two environments, one cell.
+def _(design_clickstream_metrics, load_clickstream, mo, sys):
+    """Load clickstream metrics and design signals. Two environments, one cell.
 
     Locally, polars reads the CSV from data/.
     Under WASM (emscripten), Pyodide's open_url() fetches the CSV from
-    public/ and load_system_metrics() reads it from there instead.
+    public/ and load_clickstream() reads it from there instead.
     """
     notebook_location = mo.notebook_location()
 
     if notebook_location is None:
         raise RuntimeError("Unable to determine notebook location.")
 
-    filename = "system_metrics.csv"
+    filename = "2020-Jan.csv"
 
     if sys.platform == "emscripten":
         from pyodide.http import open_url  # ty: ignore[unresolved-import]
 
         data_url = notebook_location / "public" / filename
-        df = load_system_metrics(open_url(str(data_url)))
+        df = load_clickstream(open_url(str(data_url)))
     else:
         data_path = notebook_location.parents[1] / "data" / filename
-        df = load_system_metrics(data_path)
+        df = load_clickstream(data_path)
 
-    signals_df = design_signals(df)
+    signals_df = design_clickstream_metrics(df)
     return (signals_df,)
 
 

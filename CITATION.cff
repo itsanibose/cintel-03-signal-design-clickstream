@@ -12,17 +12,17 @@ cff-version: "1.2.0"
 message: "If using this project, please cite it as described in this file."
 type: software
 
-title: cintel-03-signal-design
-date-released: "2026-03-06"
+title: cintel-03-signal-design-clickstream
+date-released: "2026-11-04"
 
 authors:
-  - family-names: Case
-    given-names: Denise M.
-    orcid: "https://orcid.org/0000-0001-6165-7389"
-    affiliation: "Northwest Missouri State University, USA"
+  - family-names: Bose
+    given-names: Anindya
+    orcid: "https://orcid.org/0009-0001-6404-4366"
+    affiliation: "Becton Dickinson, USA"
 
-repository-code: "https://github.com/denisecase/cintel-03-signal-design"
-url: "https://github.com/denisecase/cintel-03-signal-design"
+repository-code: "https://github.com/itsanibose/cintel-03-signal-design-clickstream"
+url: "https://github.com/itsanibose/cintel-03-signal-design-clickstream"
 license: MIT
 
 abstract: |
