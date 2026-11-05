@@ -43,10 +43,19 @@ Each row in the raw dataset contains the following baseline fields:
 
 From the above raw events, the Polars pipeline aggregates and calculates:
 
-* `session_duration_sec`    – The exact time span of a user's session from their first click to their last.
-* `click_velocity_per_min`  – The user's browsing speed, measured by total interactions per minute.
-* `cart_to_view_ratio`      – A conversion metric tracking how often a user moves from browsing a product to adding it to their cart.
-* `time_gap_seconds` & `is_session_stale` – The operational signals used to flag when a user has gone inactive.
+* `user_session`        - User's session id
+* `session_start_time`  - Session start time
+* `session_end_time`    - Session end  time
+* `session_duration`    - Session duration
+* `total_events`        - Total number of events
+* `views`               - Number of View events
+* `carts`               - Number of cart events
+* `remove_from_carts`   - Number of times removed from cart
+* `purchases`           - Total number of purchase
+* `cart_to_view_ratio`  - Cart to View ration
+* `purchase_to_cart_ratio` - Purchase to cart ratio
+* `session_conversion_rate`- Overall conversion rate
+* `abandoned_cart`         - Abondoned cart
 
 
 Explore these project components:
@@ -122,8 +131,8 @@ This project includes continuous integration and continuous deployment (CI/CD)
 to check project files and publish the docs.
 GitHub Actions include:
 
-- [CI: Python and Documentation Checks](https://github.com/denisecase/cintel-03-signal-design/actions/workflows/ci-python-zensical.yml)
-- [CD: Documentation Deployment](https://github.com/denisecase/cintel-03-signal-design/actions/workflows/deploy-zensical.yml)
+- [CI: Python and Documentation Checks](https://github.com/itsanibose/cintel-03-signal-design-clickstream/actions/workflows/ci-python-zensical.yml)
+- [CD: Documentation Deployment](https://github.com/itsanibose/cintel-03-signal-design-clickstream/actions/workflows/deploy-zensical.yml)
 
 ## Developer Reference
 
@@ -185,7 +194,7 @@ After making useful changes, save your work to GitHub.
 
 ```shell
 git add -A
-git commit -m "describe your changes in quotes"
+git commit -m `describe your changes in quotes`
 git push -u origin main
 ```
 
