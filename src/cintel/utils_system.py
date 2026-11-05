@@ -19,13 +19,17 @@ from pathlib import Path
 import polars as pl
 
 
-def load_system_metrics(data_file: Path) -> pl.DataFrame:
-    """Read raw system metrics (requests, errors, total_latency_ms) from a CSV file.
+def load_clickstream(data_file: Path) -> pl.DataFrame:
+    """Read raw clickstream metrics from a CSV file.
 
     Used for plain snapshots (cintel-03, cintel-06) and for the reference/
     current period files in cintel-05, which share the same three columns.
     """
-    return pl.read_csv(data_file)
+    return pl.read_csv(data_file, has_header=True).with_columns(
+        pl.col("event_time")
+        .str.replace(" UTC", "")
+        .str.to_datetime("%Y-%m-%d %H:%M:%S")
+    )
 
 
 def load_timeseries_metrics(data_file: Path) -> pl.DataFrame:
@@ -65,6 +69,103 @@ def design_signals(df: pl.DataFrame) -> pl.DataFrame:
             "avg_latency_ms",
             "throughput",
         ]
+    )
+
+
+# === cintel-03 Customized: Clickstream ===
+
+# df = pl.read_csv('data/2020-Jan.csv').with_columns(
+#     pl.col("event_time").str.replace(" UTC", "").str.to_datetime("%Y-%m-%d %H:%M:%S")
+# )
+# # print(df.head(50))
+
+
+def design_clickstream_metrics(df: pl.DataFrame) -> pl.DataFrame:
+    """Add derived signal columns for clickstream data.
+
+    This is a placeholder for any clickstream-specific signal design logic.
+    """
+    # Example: Add a signal for user session duration
+
+    session_metrics = (
+        df.group_by("user_session")
+        .agg(
+            [
+                pl.col("event_time").max().alias("session_end_time"),
+                pl.col("event_time").min().alias("session_start_time"),
+                (pl.col("event_time").max() - pl.col("event_time").min())
+                .dt.to_string()
+                .alias("session_duration"),
+                pl.len().alias("total_events"),
+                pl.col("user_session")
+                .filter(pl.col("event_type") == "view")
+                .len()
+                .alias("views"),
+                pl.col("user_session")
+                .filter(pl.col("event_type") == "cart")
+                .len()
+                .alias("carts"),
+                pl.col("user_session")
+                .filter(pl.col("event_type") == "remove_from_cart")
+                .len()
+                .alias("remove_from_carts"),
+                pl.col("user_session")
+                .filter(pl.col("event_type") == "purchase")
+                .len()
+                .alias("purchases"),
+            ]
+        )
+        .select(
+            "user_session",
+            "session_start_time",
+            "session_end_time",
+            "session_duration",
+            "total_events",
+            "views",
+            "carts",
+            "remove_from_carts",
+            "purchases",
+        )
+    )
+
+    session_metrics = session_metrics.with_columns(
+        [
+            # FUNNEL STEP 1: Cart-to-View Ratio (Micro-conversion)
+            pl.when(pl.col("views") > 0)
+            .then(pl.col("carts") / pl.col("views"))
+            .otherwise(0.0)
+            .alias("cart_to_view_ratio"),
+            # FUNNEL STEP 2: Purchase-to-Cart Ratio (Checkout completion efficiency)
+            pl.when(pl.col("carts") > 0)
+            .then(pl.col("purchases") / pl.col("carts"))
+            .otherwise(0.0)
+            .alias("purchase_to_cart_ratio"),
+            # FUNNEL STEP 3: Overall Session Conversion Rate (Total Funnel Yield)
+            pl.when(pl.col("views") > 0)
+            .then(pl.col("purchases") / pl.col("views"))
+            .otherwise(0.0)
+            .alias("session_conversion_rate"),
+            # FUNNEL STEP 4: Cart Abandonment Flags
+            pl.when((pl.col("carts") > 0) & (pl.col("purchases") == 0))
+            .then(True)
+            .otherwise(False)
+            .alias("abandoned_cart"),
+        ]
+    )
+    return session_metrics.select(
+        "user_session",
+        "session_start_time",
+        "session_end_time",
+        "session_duration",
+        "total_events",
+        "views",
+        "carts",
+        "remove_from_carts",
+        "purchases",
+        "cart_to_view_ratio",
+        "purchase_to_cart_ratio",
+        "session_conversion_rate",
+        "abandoned_cart",
     )
 
 

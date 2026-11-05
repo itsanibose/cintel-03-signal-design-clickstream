@@ -22,7 +22,7 @@ System Metrics Data
 
 Purpose
 
-- Read system metrics from a CSV (comma-separated values) file.
+- Read clickstream data (data/2020-Jan.csv) from a CSV (comma-separated values) file.
 - Design useful signals from the raw measurements.
 - Save the resulting signals as a new CSV artifact.
 - Log the pipeline process to assist with debugging and transparency.
@@ -56,7 +56,7 @@ Reusable visualization functions may come from sources such as eda-vizkit.
 SKILLS:
 
 - Reading CSV files into Polars DataFrames.
-- Defining and using constants for thresholds.
+- Defining and using calculated measures.
 - Logging for debugging and transparency.
 - Designing signals based on domain-specific rules.
 """
@@ -66,12 +66,13 @@ SKILLS:
 # First from the Python standard library (no installation needed)
 import logging
 from pathlib import Path
+import time
 from typing import Final
 
 from datafun_toolkit.logger import get_logger, log_header, log_path
 import polars as pl
 
-from cintel.utils_system import design_signals, load_system_metrics
+from cintel.utils_system import design_clickstream_metrics, load_clickstream
 
 # === CONFIGURE LOGGER ONCE PER MODULE (FILE) ===
 
@@ -85,8 +86,8 @@ ARTIFACTS_DIR: Final[Path] = ROOT_DIR / "artifacts"
 
 # === DECLARE GLOBAL CONSTANTS FOR FILE PATHS ===
 
-DATA_FILE: Final[Path] = DATA_DIR / "system_metrics.csv"
-OUTPUT_FILE: Final[Path] = ARTIFACTS_DIR / "signals.csv"
+DATA_FILE: Final[Path] = DATA_DIR / "2020-Jan.csv"
+OUTPUT_FILE: Final[Path] = ARTIFACTS_DIR / "metrics.csv"
 
 
 # === DEFINE THE MAIN FUNCTION ===
@@ -114,25 +115,33 @@ def main() -> None:
     # ----------------------------------------------------
     # STEP 1: READ CSV DATA FILE INTO A POLARS DATAFRAME (TABLE)
     # ----------------------------------------------------
-    df: pl.DataFrame = load_system_metrics(DATA_FILE)
+    start = time.perf_counter()  # Start timer for performance measurement
 
-    LOG.info(f"Loaded {df.height} system metric records")
+    df: pl.DataFrame = load_clickstream(DATA_FILE)
+
+    LOG.info(f"Loaded {df.height} clickstream records")
 
     # ----------------------------------------------------
     # STEP 2: DESIGN SIGNALS FROM RAW METRICS
     # ----------------------------------------------------
-    LOG.info("Designing signals from the raw metrics...")
+    LOG.info("Designing behaviour metrics from the clickstream data...")
 
-    signals_df: pl.DataFrame = design_signals(df)
+    clickstream_df: pl.DataFrame = design_clickstream_metrics(df)
 
-    LOG.info("Created signal columns: error_rate, avg_latency_ms, throughput")
-    LOG.info(f"Enhanced signals table has {signals_df.height} rows")
+    LOG.info(
+        "Created signal columns: session_start_time, session_end_time, session_duration, views, carts, removes, purchases, total_events etc.."
+    )
+    LOG.info(f"Enhanced signals table has {clickstream_df.height} rows")
 
     # ----------------------------------------------------
     # STEP 3: SAVE THE SIGNALS TABLE AS AN ARTIFACT
     # ----------------------------------------------------
-    signals_df.write_csv(OUTPUT_FILE)
-    LOG.info(f"Wrote signals file: {OUTPUT_FILE}")
+    clickstream_df.write_csv(OUTPUT_FILE)
+
+    end = time.perf_counter()  # End timer for performance measurement
+    elapsed_time = end - start
+    LOG.info(f"Pipeline executed in {elapsed_time:.2f} seconds")
+    LOG.info(f"Wrote clickstream metrics file: {OUTPUT_FILE}")
 
     LOG.info("========================")
     LOG.info("Pipeline executed successfully!")
