@@ -125,7 +125,7 @@ def main() -> None:
     # ----------------------------------------------------
     start = time.perf_counter()  # Start timer for performance measurement
 
-    df: pl.DataFrame = load_clickstream(DATA_FILE)
+    df: pl.DataFrame = load_clickstream(SOURCE_FILE)
 
     LOG.info(f"Loaded {df.height} clickstream records")
 
