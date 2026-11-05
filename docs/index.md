@@ -60,6 +60,10 @@ The full January data produced 965,352 sessions:
 | Events per session | 1 to 2,458 (median 1, mean 4.4) |
 | Single-event sessions | 64.9% |
 
+# Visualization in marimo interactive app
+![marimo_app](images/marimo_app.png)
+
+
 [View Signal Results](https://github.com/itsanibose/cintel-03-signal-design-clickstream/blob/main/artifacts/example-metrics.csv)
 
 ## Interpretation
