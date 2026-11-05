@@ -25,6 +25,7 @@ version = "0.1.0"
 
 dependencies = [
     # REQ: External packages used by the project code.
+    "altair>=6.3.0", # WHY: Declarative charts rendered natively by marimo in app.py.
     "datafun-toolkit", # WHY: Provides professional Python utilities for privacy-preserving logging.
     "marimo", # WHY: Enables reactive web app for app.py.
     "polars[rtcompat]", # WHY: Fast DataFrame processing; rtcompat supports older CPUs.

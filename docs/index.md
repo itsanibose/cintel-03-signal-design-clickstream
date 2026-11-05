@@ -4,88 +4,93 @@ Continuous Intelligence | Project 03 | Clickstream Analysis
 
 ## Overview
 
-A high-performance analytics pipeline built with Polars
-to engineer behavioral telemetry metrics—tracking like
- session durations,browsing velocity, cart friction ratios,
-and user inactivity thresholds—from raw online shopping
-event streams.
+A Polars pipeline that turns raw online-shopping clickstream
+events into session-level behavioral signals: session duration,
+activity counts, funnel ratios (view → cart → purchase),
+and a cart-abandonment flag.
+
+A reactive marimo app presents the signals as funnel KPIs and charts.
 
 ## Data
 
-The example uses system metrics from `data/2020-Jan.csv`.
+The pipeline reads clickstream events from `data/2020-Jan.csv`
+(about 4.26 million events from an online cosmetics store, January 2020).
+A 20-row sample is provided in `data/example-data.csv`.
 
-### Data Schema & Engineered Metrics
+Each row in the raw dataset is one user interaction with these fields:
 
-Each row in the raw dataset contains the following baseline fields:
-
-* `event_time`   – The timestamp of the interaction (stored as UTC).
-* `event_type`   – The type of user action (`view`, `cart`, `remove_from_cart`, `purchase`).
-* `price`        – The cost of the product at the time of the event.
-* `user_session` – A unique string ID tracking a single browser session.
+* `event_time`    – Timestamp of the interaction (UTC).
+* `event_type`    – User action: `view`, `cart`, `remove_from_cart`, `purchase`.
+* `product_id`    – Product identifier.
+* `category_id`   – Product category identifier.
+* `category_code` – Product category name (often empty).
+* `brand`         – Product brand (often empty).
+* `price`         – Product price at the time of the event.
+* `user_id`       – Unique user identifier.
+* `user_session`  – Unique ID for a single browser session.
 
 [View Example Dataset](https://github.com/itsanibose/cintel-03-signal-design-clickstream/blob/main/data/example-data.csv)
 
 ## Methods
 
-The pipeline creates three monitoring signals.
+Events are grouped by `user_session`, and each session becomes one row
+with these signals (see `design_clickstream_metrics()` in `utils_system.py`):
 
-From the above raw events, the Polars pipeline aggregates and calculates:
+* `session_start_time` / `session_end_time` – First and last event time.
+* `session_duration`        – Time between first and last event (ISO 8601).
+* `total_events`            – Number of events in the session.
+* `views`, `carts`, `remove_from_carts`, `purchases` – Count of each event type.
+* `cart_to_view_ratio`      – `carts / views` (0 when there are no views).
+* `purchase_to_cart_ratio`  – `purchases / carts` (0 when there are no carts).
+* `session_conversion_rate` – `purchases / views` (0 when there are no views).
+* `abandoned_cart`          – True when the session added to cart but never purchased.
 
-* `user_session`        - User's session id
-* `session_start_time`  - Session start time
-* `session_end_time`    - Session end  time
-* `session_duration`    - Session duration
-* `total_events`        - Total number of events
-* `views`               - Number of View events
-* `carts`               - Number of cart events
-* `remove_from_carts`   - Number of times removed from cart
-* `purchases`           - Total number of purchase
-* `cart_to_view_ratio`  - Cart to View ration
-* `purchase_to_cart_ratio` - Purchase to cart ratio
-* `session_conversion_rate`- Overall conversion rate
-* `abandoned_cart`         - Abondoned cart
-
+The pipeline writes the session signals to `artifacts/metrics.csv`.
 
 ## Results
 
-The example signals reveal:
+The full January data produced 965,352 sessions:
 
-| Signal | Observed Range |
+| Signal | Observed Value |
 |---|---|
-| Error rate | 0% to 2.5% |
-| Average latency | 25.0 to 33.71 ms |
-| Requests per observation | 60 to 200 |
+| Sessions with at least one view | 94.6% |
+| Sessions with at least one add-to-cart | 20.3% |
+| Sessions with a purchase | 3.4% |
+| Cart abandonment (of sessions that added to cart) | 86.6% |
+| Events per session | 1 to 2,458 (median 1, mean 4.4) |
+| Single-event sessions | 64.9% |
 
-The output contains the original measurements
-alongside the derived monitoring signals.
-
-[View Signal Results](https://github.com/denisecase/cintel-03-signal-design/blob/main/artifacts/signals.csv)
+[View Signal Results](https://github.com/itsanibose/cintel-03-signal-design-clickstream/blob/main/artifacts/example-metrics.csv)
 
 ## Interpretation
 
-Error rate provides a useful indicator of reliability,
-while average latency describes responsiveness.
+Most sessions are short and end after viewing a single product,
+so raw event counts mostly measure browsing, not buying.
 
-Request counts provide additional context about activity.
+The funnel signals show where shoppers drop off: about one in five
+sessions adds to cart, but most of those carts are abandoned,
+and only about 3% of sessions end in a purchase.
 
-Together, these signals offer a more informative view
-of system behavior than the raw measurements alone.
+The `abandoned_cart` flag points directly at sessions worth
+follow-up (for example, reminder emails or checkout fixes).
 
 ## Limitations
 
-The example does not establish acceptable performance
-thresholds or evaluate changes over time.
+Sessions are defined only by `user_session`; a single shopper
+can appear in many sessions, so these are not per-user signals.
 
-Request counts are not normalized by elapsed time,
-so they represent throughput only when observation
-intervals are comparable.
+Ratios can exceed 1 (for example, many carts after one view,
+or purchases with no recorded cart event), because events are
+counted rather than matched product by product.
+
+Duration is measured from first to last event, so single-event
+sessions have zero duration, and the analysis covers only one month.
 
 ## Conclusion
 
-Effective monitoring begins with thoughtful signal design.
-
-Signals should reflect the operational questions
-that the monitoring system is intended to answer.
+Grouping raw events into sessions turns millions of rows into
+signals that answer business questions directly:
+how far shoppers get in the funnel, and where they leave.
 
 ## Documentation Index
 
@@ -99,8 +104,9 @@ that the monitoring system is intended to answer.
 
 - [GitHub Repository](https://github.com/itsanibose/cintel-03-signal-design-clickstream)
 - [Example Pipeline](https://github.com/itsanibose/cintel-03-signal-design-clickstream/blob/main/src/cintel/signal_design.py)
+- [Signal Utilities](https://github.com/itsanibose/cintel-03-signal-design-clickstream/blob/main/src/cintel/utils_system.py)
+- [Reactive App Source](https://github.com/itsanibose/cintel-03-signal-design-clickstream/blob/main/src/cintel/app.py)
 - [Results and Artifacts](https://github.com/itsanibose/cintel-03-signal-design-clickstream/tree/main/artifacts)
-- [Project Instructions](project-instructions.md)
 
 ## Project Resources
 

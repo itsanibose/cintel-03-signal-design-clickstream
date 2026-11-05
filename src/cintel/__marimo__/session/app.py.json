@@ -1,0 +1,139 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.25.2",
+    "script_metadata_hash": null
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "18b9d5569473c40a004b307dd4368753",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "76c166754eb903be273868c75b032f57",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h1 id=\"signal-design-clickstream-sessions\">Signal Design: Clickstream Sessions</h1>\n<span class=\"paragraph\">Raw clickstream events (<code>event_time</code>, <code>event_type</code>, <code>product_id</code>,\n<code>category_id</code>, <code>category_code</code>, <code>brand</code>, <code>price</code>, <code>user_id</code>,\n<code>user_session</code>) are hard to read one row at a time. This app groups\nevents into <strong>sessions</strong> and derives signals that tell a clearer story:</span>\n<ul>\n<li><strong>Activity:</strong> <code>total_events</code>, <code>views</code>, <code>carts</code>, <code>remove_from_carts</code>,\n  <code>purchases</code>, <code>session_duration_sec</code></li>\n<li><strong>Funnel ratios:</strong> <code>cart_to_view_ratio</code>, <code>purchase_to_cart_ratio</code>,\n  <code>session_conversion_rate</code></li>\n<li><strong>Problem flag:</strong> <code>abandoned_cart</code> (carted but never purchased)</li>\n</ul>\n<span class=\"paragraph\">Pick a signal below to see the sessions where it is highest.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "62dbdbd40ffd2bec1e4fdb6a5c393d69",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">Loaded <strong>965,352</strong> sessions from <code>artifacts/metrics.csv</code>.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "f5b0778b7cbd94985605fc8df079417c",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: row;justify-content: space-around;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><marimo-stat data-value='&quot;965,352&quot;' data-label='&quot;Sessions&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat><marimo-stat data-value='&quot;3.35%&quot;' data-label='&quot;Sessions with a purchase&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat><marimo-stat data-value='&quot;86.60%&quot;' data-label='&quot;Cart abandonment rate&quot;' data-caption='&quot;of sessions that added to cart&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat><marimo-stat data-value='&quot;4.4&quot;' data-label='&quot;Avg events per session&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "lEQa",
+      "code_hash": "169c1c0e0e1c8849c52f69bdddbed313",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "PKri",
+      "code_hash": "c77822d584e017f71688a9b8a92dfabe",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "application/vnd.vegalite.v6+json": "{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v6.4.1.json\",\n  \"config\": {\n    \"axis\": {\n      \"domain\": false,\n      \"labelFontSize\": 12,\n      \"labelPadding\": 6,\n      \"ticks\": false,\n      \"titleFontSize\": 12,\n      \"titleFontWeight\": \"normal\"\n    },\n    \"title\": {\n      \"anchor\": \"start\",\n      \"fontSize\": 15,\n      \"offset\": 12\n    },\n    \"view\": {\n      \"continuousHeight\": 300,\n      \"continuousWidth\": 300,\n      \"stroke\": null\n    }\n  },\n  \"data\": {\n    \"name\": \"data-0df4439e9cbdbac1767ee673c166d846\"\n  },\n  \"datasets\": {\n    \"data-0df4439e9cbdbac1767ee673c166d846\": [\n      {\n        \"label\": \"912,886 (94.6%)\",\n        \"sessions\": 912886,\n        \"share\": 0.9456509128276525,\n        \"stage\": \"Viewed a product\"\n      },\n      {\n        \"label\": \"196,305 (20.3%)\",\n        \"sessions\": 196305,\n        \"share\": 0.20335069487606594,\n        \"stage\": \"Added to cart\"\n      },\n      {\n        \"label\": \"32,385 (3.4%)\",\n        \"sessions\": 32385,\n        \"share\": 0.033547348531934466,\n        \"stage\": \"Purchased\"\n      }\n    ]\n  },\n  \"height\": 150,\n  \"layer\": [\n    {\n      \"encoding\": {\n        \"tooltip\": [\n          {\n            \"field\": \"stage\",\n            \"title\": \"Stage\",\n            \"type\": \"nominal\"\n          },\n          {\n            \"field\": \"sessions\",\n            \"format\": \",\",\n            \"title\": \"Sessions\",\n            \"type\": \"quantitative\"\n          },\n          {\n            \"field\": \"share\",\n            \"format\": \".1%\",\n            \"title\": \"Share of all sessions\",\n            \"type\": \"quantitative\"\n          }\n        ],\n        \"x\": {\n          \"axis\": null,\n          \"field\": \"sessions\",\n          \"scale\": {\n            \"domain\": [\n              0,\n              1186751.8\n            ]\n          },\n          \"type\": \"quantitative\"\n        },\n        \"y\": {\n          \"field\": \"stage\",\n          \"sort\": null,\n          \"title\": null,\n          \"type\": \"nominal\"\n        }\n      },\n      \"mark\": {\n        \"color\": \"#2a78d6\",\n        \"cornerRadiusEnd\": 4,\n        \"size\": 22,\n        \"type\": \"bar\"\n      }\n    },\n    {\n      \"encoding\": {\n        \"text\": {\n          \"field\": \"label\",\n          \"type\": \"nominal\"\n        },\n        \"tooltip\": [\n          {\n            \"field\": \"stage\",\n            \"title\": \"Stage\",\n            \"type\": \"nominal\"\n          },\n          {\n            \"field\": \"sessions\",\n            \"format\": \",\",\n            \"title\": \"Sessions\",\n            \"type\": \"quantitative\"\n          },\n          {\n            \"field\": \"share\",\n            \"format\": \".1%\",\n            \"title\": \"Share of all sessions\",\n            \"type\": \"quantitative\"\n          }\n        ],\n        \"x\": {\n          \"axis\": null,\n          \"field\": \"sessions\",\n          \"scale\": {\n            \"domain\": [\n              0,\n              1186751.8\n            ]\n          },\n          \"type\": \"quantitative\"\n        },\n        \"y\": {\n          \"field\": \"stage\",\n          \"sort\": null,\n          \"title\": null,\n          \"type\": \"nominal\"\n        }\n      },\n      \"mark\": {\n        \"align\": \"left\",\n        \"dx\": 6,\n        \"fontSize\": 12,\n        \"type\": \"text\"\n      }\n    }\n  ],\n  \"title\": \"Shopping funnel: sessions reaching each stage\",\n  \"usermeta\": {\n    \"embedOptions\": {}\n  },\n  \"width\": \"container\"\n}"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Xref",
+      "code_hash": "c5fb4d10cb65607f3c156c70ee2f467e",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "application/vnd.vegalite.v6+json": "{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v6.4.1.json\",\n  \"config\": {\n    \"axis\": {\n      \"domain\": false,\n      \"labelFontSize\": 12,\n      \"labelPadding\": 6,\n      \"ticks\": false,\n      \"titleFontSize\": 12,\n      \"titleFontWeight\": \"normal\"\n    },\n    \"title\": {\n      \"anchor\": \"start\",\n      \"fontSize\": 15,\n      \"offset\": 12\n    },\n    \"view\": {\n      \"continuousHeight\": 300,\n      \"continuousWidth\": 300,\n      \"stroke\": null\n    }\n  },\n  \"data\": {\n    \"name\": \"data-521bf3b1f355bdb03ad93e780a7ce48c\"\n  },\n  \"datasets\": {\n    \"data-521bf3b1f355bdb03ad93e780a7ce48c\": [\n      {\n        \"day\": \"2020-01-01T00:00:00\",\n        \"purchase_rate\": 0.025885265310515552,\n        \"sessions\": 18582\n      },\n      {\n        \"day\": \"2020-01-02T00:00:00\",\n        \"purchase_rate\": 0.027591643673630272,\n        \"sessions\": 22833\n      },\n      {\n        \"day\": \"2020-01-03T00:00:00\",\n        \"purchase_rate\": 0.028738870731432435,\n        \"sessions\": 26619\n      },\n      {\n        \"day\": \"2020-01-04T00:00:00\",\n        \"purchase_rate\": 0.031234619316245788,\n        \"sessions\": 26413\n      },\n      {\n        \"day\": \"2020-01-05T00:00:00\",\n        \"purchase_rate\": 0.032725659135450946,\n        \"sessions\": 27043\n      },\n      {\n        \"day\": \"2020-01-06T00:00:00\",\n        \"purchase_rate\": 0.033725585345141335,\n        \"sessions\": 24729\n      },\n      {\n        \"day\": \"2020-01-07T00:00:00\",\n        \"purchase_rate\": 0.03299638989169675,\n        \"sessions\": 27700\n      },\n      {\n        \"day\": \"2020-01-08T00:00:00\",\n        \"purchase_rate\": 0.03278469155626924,\n        \"sessions\": 29892\n      },\n      {\n        \"day\": \"2020-01-09T00:00:00\",\n        \"purchase_rate\": 0.03295481151955046,\n        \"sessions\": 34168\n      },\n      {\n        \"day\": \"2020-01-10T00:00:00\",\n        \"purchase_rate\": 0.033098635820707864,\n        \"sessions\": 31814\n      },\n      {\n        \"day\": \"2020-01-11T00:00:00\",\n        \"purchase_rate\": 0.029689080291018237,\n        \"sessions\": 30651\n      },\n      {\n        \"day\": \"2020-01-12T00:00:00\",\n        \"purchase_rate\": 0.030927215950036033,\n        \"sessions\": 33304\n      },\n      {\n        \"day\": \"2020-01-13T00:00:00\",\n        \"purchase_rate\": 0.03633513037737925,\n        \"sessions\": 36356\n      },\n      {\n        \"day\": \"2020-01-14T00:00:00\",\n        \"purchase_rate\": 0.03216252727839551,\n        \"sessions\": 38492\n      },\n      {\n        \"day\": \"2020-01-15T00:00:00\",\n        \"purchase_rate\": 0.03318553606345185,\n        \"sessions\": 36311\n      },\n      {\n        \"day\": \"2020-01-16T00:00:00\",\n        \"purchase_rate\": 0.03396375577718317,\n        \"sessions\": 32888\n      },\n      {\n        \"day\": \"2020-01-17T00:00:00\",\n        \"purchase_rate\": 0.03397062715003969,\n        \"sessions\": 30232\n      },\n      {\n        \"day\": \"2020-01-18T00:00:00\",\n        \"purchase_rate\": 0.030747380138958197,\n        \"sessions\": 26051\n      },\n      {\n        \"day\": \"2020-01-19T00:00:00\",\n        \"purchase_rate\": 0.033885675761984174,\n        \"sessions\": 28183\n      },\n      {\n        \"day\": \"2020-01-20T00:00:00\",\n        \"purchase_rate\": 0.033926802173717234,\n        \"sessions\": 33307\n      },\n      {\n        \"day\": \"2020-01-21T00:00:00\",\n        \"purchase_rate\": 0.03461898630457685,\n        \"sessions\": 34172\n      },\n      {\n        \"day\": \"2020-01-22T00:00:00\",\n        \"purchase_rate\": 0.03381494944558145,\n        \"sessions\": 32737\n      },\n      {\n        \"day\": \"2020-01-23T00:00:00\",\n        \"purchase_rate\": 0.0322769437860299,\n        \"sessions\": 34173\n      },\n      {\n        \"day\": \"2020-01-24T00:00:00\",\n        \"purchase_rate\": 0.03207853926963482,\n        \"sessions\": 31984\n      },\n      {\n        \"day\": \"2020-01-25T00:00:00\",\n        \"purchase_rate\": 0.0296369928576688,\n        \"sessions\": 27162\n      },\n      {\n        \"day\": \"2020-01-26T00:00:00\",\n        \"purchase_rate\": 0.031666331927428536,\n        \"sessions\": 29874\n      },\n      {\n        \"day\": \"2020-01-27T00:00:00\",\n        \"purchase_rate\": 0.05107211502458751,\n        \"sessions\": 40061\n      },\n      {\n        \"day\": \"2020-01-28T00:00:00\",\n        \"purchase_rate\": 0.05479863481228669,\n        \"sessions\": 36625\n      },\n      {\n        \"day\": \"2020-01-29T00:00:00\",\n        \"purchase_rate\": 0.02882629646626893,\n        \"sessions\": 34864\n      },\n      {\n        \"day\": \"2020-01-30T00:00:00\",\n        \"purchase_rate\": 0.028448199462349708,\n        \"sessions\": 33851\n      },\n      {\n        \"day\": \"2020-01-31T00:00:00\",\n        \"purchase_rate\": 0.02820804527289169,\n        \"sessions\": 34281\n      }\n    ]\n  },\n  \"encoding\": {\n    \"tooltip\": [\n      {\n        \"field\": \"day\",\n        \"format\": \"%a %b %d\",\n        \"title\": \"Day\",\n        \"type\": \"temporal\"\n      },\n      {\n        \"field\": \"sessions\",\n        \"format\": \",\",\n        \"title\": \"Sessions\",\n        \"type\": \"quantitative\"\n      },\n      {\n        \"field\": \"purchase_rate\",\n        \"format\": \".2%\",\n        \"title\": \"Sessions with a purchase\",\n        \"type\": \"quantitative\"\n      }\n    ],\n    \"x\": {\n      \"axis\": {\n        \"labelAngle\": 0,\n        \"labelExpr\": \"(date(datum.value) - 1) % 5 == 0 ? timeFormat(datum.value, '%b %d') : ''\"\n      },\n      \"field\": \"day\",\n      \"scale\": {\n        \"paddingInner\": 0.2\n      },\n      \"timeUnit\": \"monthdate\",\n      \"title\": null,\n      \"type\": \"ordinal\"\n    },\n    \"y\": {\n      \"axis\": {\n        \"labelExpr\": \"datum.value == 0 ? '0' : format(datum.value, '~s')\"\n      },\n      \"field\": \"sessions\",\n      \"title\": \"Sessions\",\n      \"type\": \"quantitative\"\n    }\n  },\n  \"height\": 240,\n  \"mark\": {\n    \"color\": \"#2a78d6\",\n    \"cornerRadiusEnd\": 4,\n    \"type\": \"bar\"\n  },\n  \"title\": \"Sessions started per day\",\n  \"usermeta\": {\n    \"embedOptions\": {}\n  },\n  \"width\": \"container\"\n}"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "SFPL",
+      "code_hash": "101c62d13ab942a34bc0e734991cb74b",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='SFPL-0' random-id='bcf3be2d-7dc7-0c99-aad4-39ff67c80e72'><marimo-dropdown data-initial-value='[&quot;cart_to_view_ratio&quot;]' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eSignal to inspect&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-options='[&quot;total_events&quot;,&quot;views&quot;,&quot;carts&quot;,&quot;remove_from_carts&quot;,&quot;purchases&quot;,&quot;cart_to_view_ratio&quot;,&quot;purchase_to_cart_ratio&quot;,&quot;session_conversion_rate&quot;,&quot;session_duration_sec&quot;]' data-allow-select-none='false' data-searchable='false' data-full-width='false' data-disabled='false'></marimo-dropdown></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "BYtC",
+      "code_hash": "68499421bc285245ced3f67feababc1a",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Top 1,000 sessions by <code>cart_to_view_ratio</code>:</strong></span></span><marimo-ui-element object-id='BYtC-0' random-id='f3198328-752a-4112-e845-c8f81223352f'><marimo-table data-initial-value='[]' data-label='null' data-data='&quot;[{&#92;&quot;_marimo_row_id&#92;&quot;:0,&#92;&quot;user_session&#92;&quot;:&#92;&quot;12fb1cda-1c2f-4928-bea6-d70ac416c940&#92;&quot;,&#92;&quot;session_start_time&#92;&quot;:&#92;&quot;2020-01-21 14:04:25&#92;&quot;,&#92;&quot;session_end_time&#92;&quot;:&#92;&quot;2020-01-21 15:17:09&#92;&quot;,&#92;&quot;session_duration&#92;&quot;:&#92;&quot;01:12:44&#92;&quot;,&#92;&quot;total_events&#92;&quot;:1774,&#92;&quot;views&#92;&quot;:2,&#92;&quot;carts&#92;&quot;:1740,&#92;&quot;remove_from_carts&#92;&quot;:32,&#92;&quot;purchases&#92;&quot;:0,&#92;&quot;cart_to_view_ratio&#92;&quot;:870.0,&#92;&quot;purchase_to_cart_ratio&#92;&quot;:0.0,&#92;&quot;session_conversion_rate&#92;&quot;:0.0,&#92;&quot;abandoned_cart&#92;&quot;:true,&#92;&quot;session_duration_sec&#92;&quot;:4364},{&#92;&quot;_marimo_row_id&#92;&quot;:1,&#92;&quot;user_session&#92;&quot;:&#92;&quot;3cfdc45c-8985-4c1d-b1e4-baa16a641e64&#92;&quot;,&#92;&quot;session_start_time&#92;&quot;:&#92;&quot;2020-01-03 15:15:10&#92;&quot;,&#92;&quot;session_end_time&#92;&quot;:&#92;&quot;2020-01-03 17:19:37&#92;&quot;,&#92;&quot;session_duration&#92;&quot;:&#92;&quot;02:04:27&#92;&quot;,&#92;&quot;total_events&#92;&quot;:2458,&#92;&quot;views&#92;&quot;:2,&#92;&quot;carts&#92;&quot;:1367,&#92;&quot;remove_from_carts&#92;&quot;:1089,&#92;&quot;purchases&#92;&quot;:0,&#92;&quot;cart_to_view_ratio&#92;&quot;:683.5,&#92;&quot;purchase_to_cart_ratio&#92;&quot;:0.0,&#92;&quot;session_conversion_rate&#92;&quot;:0.0,&#92;&quot;abandoned_cart&#92;&quot;:true,&#92;&quot;session_duration_sec&#92;&quot;:7467},{&#92;&quot;_marimo_row_id&#92;&quot;:2,&#92;&quot;user_session&#92;&quot;:&#92;&quot;7c4eed01-63da-4bf4-9352-4458a41c9a38&#92;&quot;,&#92;&quot;session_start_time&#92;&quot;:&#92;&quot;2020-01-14 04:50:35&#92;&quot;,&#92;&quot;session_end_time&#92;&quot;:&#92;&quot;2020-01-14 05:31:23&#92;&quot;,&#92;&quot;session_duration&#92;&quot;:&#92;&quot;00:40:48&#92;&quot;,&#92;&quot;total_events&#92;&quot;:458,&#92;&quot;views&#92;&quot;:1,&#92;&quot;carts&#92;&quot;:333,&#92;&quot;remove_from_carts&#92;&quot;:93,&#92;&quot;purchases&#92;&quot;:31,&#92;&quot;cart_to_view_ratio&#92;&quot;:333.0,&#92;&quot;purchase_to_cart_ratio&#92;&quot;:0.09309309309309309,&#92;&quot;session_conversion_rate&#92;&quot;:31.0,&#92;&quot;abandoned_cart&#92;&quot;:false,&#92;&quot;session_duration_sec&#92;&quot;:2448},{&#92;&quot;_marimo_row_id&#92;&quot;:3,&#92;&quot;user_session&#92;&quot;:&#92;&quot;55dc6f62-e063-420f-819b-bd4a4b4b5412&#92;&quot;,&#92;&quot;session_start_time&#92;&quot;:&#92;&quot;2020-01-22 15:45:31&#92;&quot;,&#92;&quot;session_end_time&#92;&quot;:&#92;&quot;2020-01-22 16:49:29&#92;&quot;,&#92;&quot;session_duration&#92;&quot;:&#92;&quot;01:03:58&#92;&quot;,&#92;&quot;total_events&#92;&quot;:225,&#92;&quot;views&#92;&quot;:1,&#92;&quot;carts&#92;&quot;:224,&#92;&quot;remove_from_carts&#92;&quot;:0,&#92;&quot;purchases&#92;&quot;:0,&#92;&quot;cart_to_view_ratio&#92;&quot;:224.0,&#92;&quot;purchase_to_cart_ratio&#92;&quot;:0.0,&#92;&quot;session_conversion_rate&#92;&quot;:0.0,&#92;&quot;abandoned_cart&#92;&quot;:true,&#92;&quot;session_duration_sec&#92;&quot;:3838},{&#92;&quot;_marimo_row_id&#92;&quot;:4,&#92;&quot;user_session&#92;&quot;:&#92;&quot;0fedad69-8bc1-4f21-8cec-de2b69ab689d&#92;&quot;,&#92;&quot;session_start_time&#92;&quot;:&#92;&quot;2020-01-28 22:32:33&#92;&quot;,&#92;&quot;session_end_time&#92;&quot;:&#92;&quot;2020-01-28 23:16:14&#92;&quot;,&#92;&quot;session_duration&#92;&quot;:&#92;&quot;00:43:41&#92;&quot;,&#92;&quot;total_events&#92;&quot;:219,&#92;&quot;views&#92;&quot;:1,&#92;&quot;carts&#92;&quot;:218,&#92;&quot;remove_from_carts&#92;&quot;:0,&#92;&quot;purchases&#92;&quot;:0,&#92;&quot;cart_to_view_ratio&#92;&quot;:218.0,&#92;&quot;purchase_to_cart_ratio&#92;&quot;:0.0,&#92;&quot;session_conversion_rate&#92;&quot;:0.0,&#92;&quot;abandoned_cart&#92;&quot;:true,&#92;&quot;session_duration_sec&#92;&quot;:2621},{&#92;&quot;_marimo_row_id&#92;&quot;:5,&#92;&quot;user_session&#92;&quot;:&#92;&quot;b4d905a6-b187-46e3-9465-b36dbb632358&#92;&quot;,&#92;&quot;session_start_time&#92;&quot;:&#92;&quot;2020-01-14 10:23:27&#92;&quot;,&#92;&quot;session_end_time&#92;&quot;:&#92;&quot;2020-01-14 11:04:37&#92;&quot;,&#92;&quot;session_duration&#92;&quot;:&#92;&quot;00:41:10&#92;&quot;,&#92;&quot;total_events&#92;&quot;:226,&#92;&quot;views&#92;&quot;:1,&#92;&quot;carts&#92;&quot;:178,&#92;&quot;remove_from_carts&#92;&quot;:47,&#92;&quot;purchases&#92;&quot;:0,&#92;&quot;cart_to_view_ratio&#92;&quot;:178.0,&#92;&quot;purchase_to_cart_ratio&#92;&quot;:0.0,&#92;&quot;session_conversion_rate&#92;&quot;:0.0,&#92;&quot;abandoned_cart&#92;&quot;:true,&#92;&quot;session_duration_sec&#92;&quot;:2470},{&#92;&quot;_marimo_row_id&#92;&quot;:6,&#92;&quot;user_session&#92;&quot;:&#92;&quot;0998ccf6-7008-4599-be00-158d3571a586&#92;&quot;,&#92;&quot;session_start_time&#92;&quot;:&#92;&quot;2020-01-01 17:23:41&#92;&quot;,&#92;&quot;session_end_time&#92;&quot;:&#92;&quot;2020-01-01 19:33:38&#92;&quot;,&#92;&quot;session_duration&#92;&quot;:&#92;&quot;02:09:57&#92;&quot;,&#92;&quot;total_events&#92;&quot;:177,&#92;&quot;views&#92;&quot;:1,&#92;&quot;carts&#92;&quot;:176,&#92;&quot;remove_from_carts&#92;&quot;:0,&#92;&quot;purchases&#92;&quot;:0,&#92;&quot;cart_to_view_ratio&#92;&quot;:176.0,&#92;&quot;purchase_to_cart_ratio&#92;&quot;:0.0,&#92;&quot;session_conversion_rate&#92;&quot;:0.0,&#92;&quot;abandoned_cart&#92;&quot;:true,&#92;&quot;session_duration_sec&#92;&quot;:7797},{&#92;&quot;_marimo_row_id&#92;&quot;:7,&#92;&quot;user_session&#92;&quot;:&#92;&quot;47de585f-b714-43f1-baaa-5bbec7736bf6&#92;&quot;,&#92;&quot;session_start_time&#92;&quot;:&#92;&quot;2020-01-07 13:46:14&#92;&quot;,&#92;&quot;session_end_time&#92;&quot;:&#92;&quot;2020-01-07 14:14:48&#92;&quot;,&#92;&quot;session_duration&#92;&quot;:&#92;&quot;00:28:34&#92;&quot;,&#92;&quot;total_events&#92;&quot;:170,&#92;&quot;views&#92;&quot;:1,&#92;&quot;carts&#92;&quot;:167,&#92;&quot;remove_from_carts&#92;&quot;:2,&#92;&quot;purchases&#92;&quot;:0,&#92;&quot;cart_to_view_ratio&#92;&quot;:167.0,&#92;&quot;purchase_to_cart_ratio&#92;&quot;:0.0,&#92;&quot;session_conversion_rate&#92;&quot;:0.0,&#92;&quot;abandoned_cart&#92;&quot;:true,&#92;&quot;session_duration_sec&#92;&quot;:1714},{&#92;&quot;_marimo_row_id&#92;&quot;:8,&#92;&quot;user_session&#92;&quot;:&#92;&quot;36022422-0123-4db9-ada5-740603998f79&#92;&quot;,&#92;&quot;session_start_time&#92;&quot;:&#92;&quot;2020-01-09 13:04:16&#92;&quot;,&#92;&quot;session_end_time&#92;&quot;:&#92;&quot;2020-01-09 13:49:47&#92;&quot;,&#92;&quot;session_duration&#92;&quot;:&#92;&quot;00:45:31&#92;&quot;,&#92;&quot;total_events&#92;&quot;:164,&#92;&quot;views&#92;&quot;:1,&#92;&quot;carts&#92;&quot;:163,&#92;&quot;remove_from_carts&#92;&quot;:0,&#92;&quot;purchases&#92;&quot;:0,&#92;&quot;cart_to_view_ratio&#92;&quot;:163.0,&#92;&quot;purchase_to_cart_ratio&#92;&quot;:0.0,&#92;&quot;session_conversion_rate&#92;&quot;:0.0,&#92;&quot;abandoned_cart&#92;&quot;:true,&#92;&quot;session_duration_sec&#92;&quot;:2731},{&#92;&quot;_marimo_row_id&#92;&quot;:9,&#92;&quot;user_session&#92;&quot;:&#92;&quot;75ea51ec-4d37-466c-a567-2767eb20fdcb&#92;&quot;,&#92;&quot;session_start_time&#92;&quot;:&#92;&quot;2020-01-09 08:20:09&#92;&quot;,&#92;&quot;session_end_time&#92;&quot;:&#92;&quot;2020-01-09 09:06:06&#92;&quot;,&#92;&quot;session_duration&#92;&quot;:&#92;&quot;00:45:57&#92;&quot;,&#92;&quot;total_events&#92;&quot;:585,&#92;&quot;views&#92;&quot;:2,&#92;&quot;carts&#92;&quot;:326,&#92;&quot;remove_from_carts&#92;&quot;:0,&#92;&quot;purchases&#92;&quot;:257,&#92;&quot;cart_to_view_ratio&#92;&quot;:163.0,&#92;&quot;purchase_to_cart_ratio&#92;&quot;:0.7883435582822086,&#92;&quot;session_conversion_rate&#92;&quot;:128.5,&#92;&quot;abandoned_cart&#92;&quot;:false,&#92;&quot;session_duration_sec&#92;&quot;:2757}]&quot;' data-total-rows='1000' data-total-columns='14' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='true' data-page-size='10' data-field-types='[[&quot;user_session&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;session_start_time&quot;,[&quot;datetime&quot;,&quot;datetime[\u03bcs]&quot;]],[&quot;session_end_time&quot;,[&quot;datetime&quot;,&quot;datetime[\u03bcs]&quot;]],[&quot;session_duration&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;total_events&quot;,[&quot;integer&quot;,&quot;i64&quot;]],[&quot;views&quot;,[&quot;integer&quot;,&quot;i64&quot;]],[&quot;carts&quot;,[&quot;integer&quot;,&quot;i64&quot;]],[&quot;remove_from_carts&quot;,[&quot;integer&quot;,&quot;i64&quot;]],[&quot;purchases&quot;,[&quot;integer&quot;,&quot;i64&quot;]],[&quot;cart_to_view_ratio&quot;,[&quot;number&quot;,&quot;f64&quot;]],[&quot;purchase_to_cart_ratio&quot;,[&quot;number&quot;,&quot;f64&quot;]],[&quot;session_conversion_rate&quot;,[&quot;number&quot;,&quot;f64&quot;]],[&quot;abandoned_cart&quot;,[&quot;boolean&quot;,&quot;bool&quot;]],[&quot;session_duration_sec&quot;,[&quot;integer&quot;,&quot;i64&quot;]]]' data-selection='&quot;multi&quot;' data-show-filters='true' data-show-download='true' data-show-search='true' data-show-column-summaries='true' data-show-data-types='true' data-show-page-size-selector='true' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[]' data-hidden-columns='[]' data-has-stable-row-id='true' data-lazy='false' data-preload='false'></marimo-table></marimo-ui-element></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "RGSE",
+      "code_hash": "70efc23cd3219abc8bc7f03ed7ce06d6",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h2 id=\"learn-more-at-marimoio\"><a href=\"https://marimo.io/\" rel=\"noopener noreferrer\" target=\"_blank\">\ud83d\ude0a Learn more at marimo.io</a></h2>\n<span class=\"paragraph\"><strong>Running locally?</strong>\nTo stop the app, click in the VS Code terminal,\nthen press <strong>CTRL</strong> and <strong>c</strong> together (CTRL+c).\nWhen it asks \"Are you sure you want to quit? (y/N)\",\ntype <strong>y</strong> and press <strong>Enter</strong>.</span>\n<hr /></span>"
+          }
+        }
+      ],
+      "console": []
+    }
+  ]
+}
