@@ -87,7 +87,15 @@ ARTIFACTS_DIR: Final[Path] = ROOT_DIR / "artifacts"
 # === DECLARE GLOBAL CONSTANTS FOR FILE PATHS ===
 
 DATA_FILE: Final[Path] = DATA_DIR / "2020-Jan.csv"
+EXAMPLE_DATA: Final[Path] = (
+    DATA_DIR / "example-data.csv"
+)  # this file will be used if original file is not found
 OUTPUT_FILE: Final[Path] = ARTIFACTS_DIR / "metrics.csv"
+
+if DATA_FILE.exists():
+    SOURCE_FILE = DATA_FILE
+else:
+    SOURCE_FILE = EXAMPLE_DATA
 
 
 # === DEFINE THE MAIN FUNCTION ===
